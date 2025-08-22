@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Checkout</h2>
+
+{% if orders %}
+    <h3>Your Orders</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.product.product_name }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>{{ order.status }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No orders available for checkout.</p>
+{% endif %}
+
+{% endblock %}

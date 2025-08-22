@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ product.name }}</h2>
+<p>{{ product.description }}</p>
+<p>Price: {{ product.price }} | Stock: {{ product.stock }}</p>
+<form method="post" action="/cart/api/cart/">{% csrf_token %}
+  <input type="hidden" name="product" value="{{ product.id }}">
+  <input type="number" name="quantity" value="1" min="1">
+  <button type="submit">Add to Cart (API via session)</button>
+</form>
+{% endblock %}

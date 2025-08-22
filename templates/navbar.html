@@ -1,0 +1,13 @@
+<nav class="nav">
+  <a href="/products/list/">Products</a>
+  <a href="/cart/">Cart</a>
+  <a href="/orders/">(API) Orders</a>
+  <a href="/docs/">Swagger</a>
+  {% if request.user.is_authenticated %}
+    <span>Hi, {{ request.user.username }}</span>
+    <a href="/accounts/logout/">Logout</a>
+  {% else %}
+    <a href="/accounts/login/">Login</a>
+    <a href="/accounts/signup/">Signup</a>
+  {% endif %}
+</nav>
