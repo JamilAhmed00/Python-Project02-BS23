@@ -1,11 +1,11 @@
-from django.shortcuts import render
 
-# Create your views here.
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
+
+from django.shortcuts import render, redirect
+from rest_framework import viewsets, permissions
 from .models import CartItem
 from .serializers import CartItemSerializer
 
+# DRF ViewSet (API)
 class CartItemViewSet(viewsets.ModelViewSet):
     serializer_class = CartItemSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -23,10 +23,9 @@ class CartItemViewSet(viewsets.ModelViewSet):
             item.quantity += serializer.validated_data.get('quantity', 1)
             item.save()
         else:
-            serializer.instance = item  
+            serializer.instance = item
 
     def perform_update(self, serializer):
-        
         if serializer.instance.user != self.request.user:
             self.permission_denied(self.request, message="Not your cart item")
         serializer.save()
@@ -35,3 +34,14 @@ class CartItemViewSet(viewsets.ModelViewSet):
         if instance.user != self.request.user:
             self.permission_denied(self.request, message="Not your cart item")
         instance.delete()
+
+
+# Django Template View (HTML)
+def cart_page(request):
+    if request.user.is_authenticated:
+        cart_items = CartItem.objects.filter(user=request.user).select_related("product")
+    else:
+        cart_items = []
+
+    total_price = sum([item.product.price * item.quantity for item in cart_items])
+    return render(request, "cart/cart.html", {"cart_items": cart_items, "total_price": total_price})

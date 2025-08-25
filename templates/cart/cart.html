@@ -1,5 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Your Cart</h2>
-<p>This page is a simple placeholder. Use Swagger or the browsable API to manage cart, or wire up AJAX later.</p>
+
+{% if cart_items %}
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>${{ item.product.price|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><strong>Total: ${{ total_price|floatformat:2 }}</strong></p>
+
+<form action="{% url 'checkout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Checkout</button>
+</form>
+
+{% else %}
+<p>Your cart is empty.</p>
+{% endif %}
+
 {% endblock %}
